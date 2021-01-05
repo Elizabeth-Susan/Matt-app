@@ -37,6 +37,9 @@ function displayTemperature(response) {
   let windElement = document.querySelector("#wind");
   //11 changing the day, hour and minutes to last updated with span and id
   let dateElement = document.querySelector("#date");
+  //15(1) changing the attributes src and alt txt by what is displayed in response.data
+  let iconElement = document.querySelector("#icon");
+
   temperatureElement.innerHTML = Math.round(response.data.main.temp);
   cityElement.innerHTML = response.data.name;
   //9 capitalize via CSS the first letter of description
@@ -45,10 +48,13 @@ function displayTemperature(response) {
   windElement.innerHTML = Math.round(response.data.wind.speed);
   //13 in response.data it mentions an integer with the milliseconds since 1970 so multiply by 1000 gives current time and date
   dateElement.innerHTML = formatDate(response.data.dt * 1000);
+  //15(2)SETTING ATTRIBUTES OF AN ELEMENT iconElement.innerHTML = `http://openweathermap.org/img/wn/10d@2x.png`
+  iconElement.setAttribute("src", `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`);
+  iconElement.setAttribute("alt", response.data.weather[0].description);
 }
 //1 copy the apiKey
 let apiKey = "a8bb545115365cdae986d0ebd7521ddb";
-let city = "London";
+let city = "New York";
 //2 update the apiUrl with units and apiKey
 let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 //3 console.log(apiUrl); to check it is working
