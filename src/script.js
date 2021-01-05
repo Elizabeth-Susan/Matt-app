@@ -40,7 +40,14 @@ function displayTemperature(response) {
   //15(1) changing the attributes src and alt txt by what is displayed in response.data
   let iconElement = document.querySelector("#icon");
 
-  temperatureElement.innerHTML = Math.round(response.data.main.temp);
+  //25 access a global variable and move the actual celcius temp (store it inside the variable)
+  celciusTemperature = response.data.main.temp;
+
+  //32 add and remove this for default page upon loading a new searched city
+  celciusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
+
+  temperatureElement.innerHTML = Math.round(celciusTemperature);
   cityElement.innerHTML = response.data.name;
   //9 capitalize via CSS the first letter of description
   descriptionElement.innerHTML = response.data.weather[0].description;
@@ -73,6 +80,29 @@ function handleSubmit(event) {
   search(cityInputElement.value);
 }
 
+//26 link of F temperature using global variable to avoid double calculations
+function displayFahrenheitTemperature(event) {
+  event.preventDefault();
+  let temperatureElement = document.querySelector("#temperature");
+  //30 whenever I click on the F remove the active class from celcius link
+  celciusLink.classList.remove("active");
+  fahrenheitLink.classList.add("active");
+  // math will be applied on the celcius temp
+  let fahrenheitTemperature = (celciusTemperature * 9) / 5 + 32;
+  temperatureElement.innerHTML = Math.round(fahrenheitTemperature);
+}
+
+//28 no need of formula as need the global variable to be displayed again
+function displayCelciusTemperature(event) {
+  event.preventDefault();
+  let temperatureElement = document.querySelector("#temperature");
+  //31 whenever I click on the C remove the active class from fahrenheit link
+  celciusLink.classList.add("active");
+  fahrenheitLink.classList.remove("active");
+  temperatureElement.innerHTML = Math.round(celciusTemperature);
+}
+//29 via CSS pretend thet the C and F are not links when clicked take off cursor with hand and underline and change color
+
 //1 copy the apiKey
 //let apiKey = "a8bb545115365cdae986d0ebd7521ddb";
 //let city = "New York";
@@ -82,9 +112,20 @@ function handleSubmit(event) {
 //4 fetch this url using axios
 //axios.get(apiUrl).then(displayTemperature);
 
+//24 new global variable=nothing on load KEEPS TRACK OF THE CELCIUS TEMP
+let celciusTemperature = null;
+
 //16 linking the form with js & adding eventListener
 let form = document.querySelector("#search-form");
 form.addEventListener("submit", handleSubmit);
+
+//23 create a variable to target the F and whenever clicked display F temperature
+let fahrenheitLink = document.querySelector("#fahrenheit-link");
+fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
+
+//27 create a variable to target the C and whenever clicked display C temperature
+let celciusLink = document.querySelector("#celcius-link");
+celciusLink.addEventListener("click", displayCelciusTemperature);
 
 //21 search for a default city upon loading the page
 search("New York");
