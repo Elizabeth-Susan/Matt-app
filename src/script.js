@@ -49,14 +49,42 @@ function displayTemperature(response) {
   //13 in response.data it mentions an integer with the milliseconds since 1970 so multiply by 1000 gives current time and date
   dateElement.innerHTML = formatDate(response.data.dt * 1000);
   //15(2)SETTING ATTRIBUTES OF AN ELEMENT iconElement.innerHTML = `http://openweathermap.org/img/wn/10d@2x.png`
-  iconElement.setAttribute("src", `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`);
+  iconElement.setAttribute(
+    "src",
+    `http://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`
+  );
   iconElement.setAttribute("alt", response.data.weather[0].description);
 }
+
+//19 function receives city-this serach function makes the AJAX call
+function search(city) {
+  //20 takes care of displaying the city so no city variable needed and move the entire api here
+  let apiKey = "a8bb545115365cdae986d0ebd7521ddb";
+  let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  axios.get(apiUrl).then(displayTemperature);
+}
+
+//17 function receives event and add id to the search input
+function handleSubmit(event) {
+  event.preventDefault();
+  let cityInputElement = document.querySelector("#city-input");
+  //18 logs the value entered in the search console.log(cityInputElement.value);
+  //22 need to send the api call to fetch the data TO SEARCH
+  search(cityInputElement.value);
+}
+
 //1 copy the apiKey
-let apiKey = "a8bb545115365cdae986d0ebd7521ddb";
-let city = "New York";
+//let apiKey = "a8bb545115365cdae986d0ebd7521ddb";
+//let city = "New York";
 //2 update the apiUrl with units and apiKey
-let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+//let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 //3 console.log(apiUrl); to check it is working
 //4 fetch this url using axios
-axios.get(apiUrl).then(displayTemperature);
+//axios.get(apiUrl).then(displayTemperature);
+
+//16 linking the form with js & adding eventListener
+let form = document.querySelector("#search-form");
+form.addEventListener("submit", handleSubmit);
+
+//21 search for a default city upon loading the page
+search("New York");
